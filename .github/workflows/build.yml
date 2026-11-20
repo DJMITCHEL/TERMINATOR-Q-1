@@ -1,0 +1,30 @@
+name: Build TERMINATOR Q
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure
+        run: cmake -B build -G "Visual Studio 17 2022" -A x64
+
+      - name: Build
+        run: cmake --build build --config Release --parallel
+
+      - name: Package
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path dist | Out-Null
+          Copy-Item -Recurse "build/TerminatorQ_artefacts/Release/VST3/TERMINATOR Q.vst3" "dist/TERMINATOR Q.vst3"
+
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: TERMINATOR-Q-VST3-Windows
+          path: dist
