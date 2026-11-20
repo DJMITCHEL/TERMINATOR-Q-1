@@ -4,7 +4,7 @@ using namespace TQColours;
 
 static juce::Font mkFont (float size, bool bold = false)
 {
-    juce::Font f (juce::FontOptions (size));
+        juce::Font f { juce::FontOptions { size } };
     return bold ? f.boldened() : f;
 }
 
